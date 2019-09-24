@@ -38,7 +38,6 @@ import { Splits } from "../../../common/models/splits/splits";
 import { Stage } from "../../../common/models/stage/stage";
 import { TimeShift } from "../../../common/models/time-shift/time-shift";
 import { Timekeeper } from "../../../common/models/timekeeper/timekeeper";
-import { User } from "../../../common/models/user/user";
 import { ViewSupervisor } from "../../../common/models/view-supervisor/view-supervisor";
 import { VisualizationProps } from "../../../common/models/visualization-props/visualization-props";
 import { Fn } from "../../../common/utils/general/general";
@@ -49,7 +48,7 @@ import { FilterTile } from "../../components/filter-tile/filter-tile";
 import { GlobalEventListener } from "../../components/global-event-listener/global-event-listener";
 import { ManualFallback } from "../../components/manual-fallback/manual-fallback";
 import { PinboardPanel } from "../../components/pinboard-panel/pinboard-panel";
-import { Direction, ResizeHandle } from "../../components/resize-handle/resize-handle";
+import { Direction, DragHandle, ResizeHandle } from "../../components/resize-handle/resize-handle";
 import { SeriesTilesRow } from "../../components/series-tile/series-tiles-row";
 import { SplitTile } from "../../components/split-tile/split-tile";
 import { SvgIcon } from "../../components/svg-icon/svg-icon";
@@ -90,7 +89,6 @@ const defaultLayout: CubeViewLayout = {
 export interface CubeViewProps {
   initTimekeeper?: Timekeeper;
   maxFilters?: number;
-  user?: User;
   hash: string;
   updateViewHash: (newHash: string, force?: boolean) => void;
   getCubeViewHash?: (essence: Essence, withPrefix?: boolean) => string;
@@ -476,9 +474,9 @@ export class CubeView extends React.Component<CubeViewProps, CubeViewState> {
     (this.refs["filterTile"] as FilterTile).filterMenuRequest(dimension);
   }
 
-  newMeasureExpression = (measure: Measure) => {
-    if (!measure) return;
-    (this.refs["seriesTile"] as SeriesTilesRow).newExpressionSeries(measure);
+  newExpressionSeries = (series: Series) => {
+    if (!series) return;
+    (this.refs["seriesTile"] as SeriesTilesRow).newExpressionSeries(series);
   }
 
   changeTimezone = (newTimezone: Timezone) => {
@@ -585,16 +583,18 @@ export class CubeView extends React.Component<CubeViewProps, CubeViewState> {
           essence={essence}
           menuStage={menuStage}
           triggerFilterMenu={this.triggerFilterMenu}
-          newMeasureExpression={this.newMeasureExpression}
+          newSeriesExpression={this.newExpressionSeries}
         />}
         {!this.isSmallDevice() && !layout.factPanel.hidden && <ResizeHandle
           direction={Direction.LEFT}
-          initialValue={layout.factPanel.width}
+          value={layout.factPanel.width}
           onResize={this.onFactPanelResize}
           onResizeEnd={this.onPanelResizeEnd}
           min={MIN_PANEL_WIDTH}
           max={MAX_PANEL_WIDTH}
-        />}
+        >
+          <DragHandle />
+        </ResizeHandle>}
 
         <div className="center-panel" style={styles.centerPanel}>
           <div className="center-top-bar">
@@ -648,12 +648,14 @@ export class CubeView extends React.Component<CubeViewProps, CubeViewState> {
 
         {!this.isSmallDevice() && !layout.pinboard.hidden && <ResizeHandle
           direction={Direction.RIGHT}
-          initialValue={layout.pinboard.width}
+          value={layout.pinboard.width}
           onResize={this.onPinboardPanelResize}
           onResizeEnd={this.onPanelResizeEnd}
           min={MIN_PANEL_WIDTH}
           max={MAX_PANEL_WIDTH}
-        />}
+        >
+          <DragHandle />
+         </ResizeHandle>}
         {!layout.pinboard.hidden && <PinboardPanel
           style={styles.pinboardPanel}
           clicker={clicker}

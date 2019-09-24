@@ -35,7 +35,6 @@ export interface BaseVisualizationState {
   dragOnMeasure?: Measure;
   scrollLeft?: number;
   scrollTop?: number;
-  hoverMeasure?: Measure;
 }
 
 export class BaseVisualization<S extends BaseVisualizationState> extends React.Component<VisualizationProps, S> {
@@ -51,8 +50,7 @@ export class BaseVisualization<S extends BaseVisualizationState> extends React.C
     return {
       datasetLoad: loading,
       scrollLeft: 0,
-      scrollTop: 0,
-      hoverMeasure: null
+      scrollTop: 0
     };
   }
 

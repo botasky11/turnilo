@@ -38,6 +38,10 @@ this is how Turnilo emerged.
 
 ![Turnilo UI](https://github.com/allegro/turnilo/raw/master/docs/images/showcase.gif)
 
+## Join us!
+
+[Join the chat on Slack](https://bit.ly/2WgiCNr)
+
 ## Pre-requisites
 
 * [Node.js](https://nodejs.org/) - 10.x or 8.x version.
@@ -62,11 +66,11 @@ and open [http://localhost:9090/](http://localhost:9090/).
 turnilo --examples
 ```
 
-Or connect to the existing Druid cluster using `--druid` command line option.
-Turnilo will automatically introspect your Druid cluster and figure out available datasets.
+Or connect to the existing Druid broker using `--druid` command line option.
+Turnilo will automatically introspect your Druid broker and figure out available datasets.
 
 ```
-turnilo --druid broker_host:broker_port
+turnilo --druid http[s]://druid-broker-hostname[:port]
 ```
 
 ## Documentation
@@ -95,10 +99,10 @@ Run Wikipedia examples.
 npm run start:dev -- --examples
 ```
 
-Connect to the existing Druid cluster.
+Connect to the existing Druid broker.
 
 ```
-npm run start:dev -- --druid broker_host:broker_port
+npm run start:dev -- --druid http[s]://druid-broker-hostname[:port]
 ```
 
 ### Testing
